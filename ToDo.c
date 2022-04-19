@@ -10,7 +10,7 @@ struct Tarea {
 };
 
 int main(){
-    int cantidadTareas;
+    int cantidadTareas,j;
     struct Tarea **TareasPendientes;
     struct Tarea **TareasRealizadas;
     char *Buff;
@@ -30,7 +30,7 @@ int main(){
 
     for (int i = 0; i < cantidadTareas; i++)
     {
-        TareasPendientes[i] = (struct tarea *) malloc(sizeof(struct Tarea));
+        TareasPendientes[i] = (struct Tarea *) malloc(sizeof(struct Tarea));
     }
     
 //Cargo datos
@@ -62,13 +62,12 @@ int main(){
         printf("\n¿La tarea se realizo (Si = 1, No = 0? ");
         scanf("%d", &ControlTarea);
 
-        
-
         if (ControlTarea)
         {
-            TareasRealizadas[i] = TareasPendientes[i];
+            TareasRealizadas[ContadorTareasRealizadas] = TareasPendientes[i];
+            TareasPendientes[i] = NULL;
             ContadorTareasRealizadas++;
-        }
+        } 
         
     }
 
@@ -79,6 +78,20 @@ int main(){
         printf("\n\nTarea: %d", TareasRealizadas[i]->TareaID);
         printf("\nDescripcion: %s", TareasRealizadas[i]->Descripcion);
         printf("\nDuracion: %d", TareasRealizadas[i]->Duracion);
+    }
+
+    printf("\n*****TAREAS PENDIENTES*****\n");
+
+      for (int i = 0; i < cantidadTareas; i++)
+    {
+        if (TareasPendientes[i] != NULL)
+        {
+             printf("\n\nTarea: %d", TareasPendientes[i]->TareaID);
+        printf("\nDescripcion: %s", TareasPendientes[i]->Descripcion);
+        printf("\nDuracion: %d", TareasPendientes[i]->Duracion);
+        }
+        
+       
     }
     
     
