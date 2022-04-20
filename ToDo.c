@@ -21,7 +21,7 @@ int main(){
 
     Buff = (char *) malloc(100 * sizeof(char));
 
-    printf("Ingrese la cantidad de tareas a cargar: ");
+    printf("\nIngrese la cantidad de tareas a cargar: ");
     scanf("%d", &cantidadTareas);
     getchar();
 //Reservo memoria de tareas pendientes
@@ -38,20 +38,20 @@ int main(){
     for (int i = 0; i < cantidadTareas; i++)
     {
         TareasPendientes[i]->TareaID = i+1;
-        printf("\n\nTarea %d", TareasPendientes[i]->TareaID);
+        printf("\nTarea %d", TareasPendientes[i]->TareaID);
         printf("\nDescripcion: ");
         gets(Buff);
 
         TareasPendientes[i]->Descripcion = (char *) malloc(strlen(Buff)+1 * sizeof(char));
         strcpy(TareasPendientes[i]->Descripcion, Buff);
 
-        TareasPendientes[i]->Duracion = 10 + rand() % 100;
+        TareasPendientes[i]->Duracion = 10 + rand() % 100 - 10;
 
-        printf("Duracion: %d", TareasPendientes[i]->Duracion);
+        printf("Duracion: %d\n", TareasPendientes[i]->Duracion);
     }
 
 //Muestro tareas cargadas
-    printf("\n*****CONTROL DE TAREAS PENDIENTES CARGADAS*****\n");
+    printf("\n\n*****CONTROL DE TAREAS PENDIENTES CARGADAS*****\n");
 
     for (int i = 0; i < cantidadTareas; i++)
     {
@@ -75,20 +75,20 @@ int main(){
 
     for (int i = 0; i < ContadorTareasRealizadas; i++)
     {
-        printf("\n\nTarea: %d", TareasRealizadas[i]->TareaID);
+        printf("\nTarea: %d", TareasRealizadas[i]->TareaID);
         printf("\nDescripcion: %s", TareasRealizadas[i]->Descripcion);
-        printf("\nDuracion: %d", TareasRealizadas[i]->Duracion);
+        printf("\nDuracion: %d\n", TareasRealizadas[i]->Duracion);
     }
 
-    printf("\n*****TAREAS PENDIENTES*****\n");
+    printf("\n\n*****TAREAS PENDIENTES*****\n");
 
       for (int i = 0; i < cantidadTareas; i++)
     {
         if (TareasPendientes[i] != NULL)
         {
-             printf("\n\nTarea: %d", TareasPendientes[i]->TareaID);
+             printf("\nTarea: %d", TareasPendientes[i]->TareaID);
         printf("\nDescripcion: %s", TareasPendientes[i]->Descripcion);
-        printf("\nDuracion: %d", TareasPendientes[i]->Duracion);
+        printf("\nDuracion: %d\n", TareasPendientes[i]->Duracion);
         }
         
        
