@@ -16,6 +16,7 @@ int main(){
     char *Buff;
     int ControlTarea; //1=Si, 0=No
     int ContadorTareasRealizadas = 0;
+    int TareaBuscada;
 
     srand(time(NULL));
 
@@ -45,7 +46,7 @@ int main(){
         TareasPendientes[i]->Descripcion = (char *) malloc(strlen(Buff)+1 * sizeof(char));
         strcpy(TareasPendientes[i]->Descripcion, Buff);
 
-        TareasPendientes[i]->Duracion = 10 + rand() % 100 - 10;
+        TareasPendientes[i]->Duracion = 10 + rand() % 90;
 
         printf("Duracion: %d\n", TareasPendientes[i]->Duracion);
     }
@@ -86,15 +87,43 @@ int main(){
     {
         if (TareasPendientes[i] != NULL)
         {
-             printf("\nTarea: %d", TareasPendientes[i]->TareaID);
-        printf("\nDescripcion: %s", TareasPendientes[i]->Descripcion);
-        printf("\nDuracion: %d\n", TareasPendientes[i]->Duracion);
+            printf("\nTarea: %d", TareasPendientes[i]->TareaID);
+            printf("\nDescripcion: %s", TareasPendientes[i]->Descripcion);
+            printf("\nDuracion: %d\n", TareasPendientes[i]->Duracion);
         }
         
        
     }
-    
-    
+    //Buscar tareas
+
+    puts("\n*****BUSCADOR DE TAREAS*****\n");
+
+    printf("Ingrese el ID de la tarea a buscar: ");
+    scanf("%d", &TareaBuscada);
+    getchar();
+/*
+    for (int i = 0; i < cantidadTareas; i++)
+    {
+        if (TareaBuscada == TareasPendientes[i]->TareaID)
+        {
+            puts("\nTarea Pendiente");
+            printf("Tarea: %d", TareasPendientes[i]->TareaID);
+            printf("\nDescripcion: %s", TareasPendientes[i]->Descripcion);
+            printf("\nDuracion: %d\n", TareasPendientes[i]->Duracion);
+        } 
+    }
+ */
+    for (int i = 0; i < cantidadTareas; i++)
+    {
+        if (TareaBuscada == TareasRealizadas[i]->TareaID)
+        {
+            puts("\nTarea Realizada");
+            
+            printf("\nTarea: %d", TareasRealizadas[i]->TareaID);
+            printf("\nDescripcion: %s", TareasRealizadas[i]->Descripcion);
+            printf("\nDuracion: %d\n", TareasRealizadas[i]->Duracion);
+        }
+    }    
 
     //Libero memorias
     free(Buff);
