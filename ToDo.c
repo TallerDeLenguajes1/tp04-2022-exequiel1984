@@ -9,6 +9,8 @@ struct Tarea {
     int Duracion; // entre 10 – 100 
 };
 
+void BuscarTarea (struct Tarea **, struct Tarea **, int, int);
+
 int main(){
     int cantidadTareas,j;
     struct Tarea **TareasPendientes;
@@ -94,36 +96,13 @@ int main(){
         
        
     }
-    //Buscar tareas
 
     puts("\n*****BUSCADOR DE TAREAS*****\n");
-
     printf("Ingrese el ID de la tarea a buscar: ");
     scanf("%d", &TareaBuscada);
     getchar();
-/*
-    for (int i = 0; i < cantidadTareas; i++)
-    {
-        if (TareaBuscada == TareasPendientes[i]->TareaID)
-        {
-            puts("\nTarea Pendiente");
-            printf("Tarea: %d", TareasPendientes[i]->TareaID);
-            printf("\nDescripcion: %s", TareasPendientes[i]->Descripcion);
-            printf("\nDuracion: %d\n", TareasPendientes[i]->Duracion);
-        } 
-    }
- */
-    for (int i = 0; i < cantidadTareas; i++)
-    {
-        if (TareaBuscada == TareasRealizadas[i]->TareaID)
-        {
-            puts("\nTarea Realizada");
-            
-            printf("\nTarea: %d", TareasRealizadas[i]->TareaID);
-            printf("\nDescripcion: %s", TareasRealizadas[i]->Descripcion);
-            printf("\nDuracion: %d\n", TareasRealizadas[i]->Duracion);
-        }
-    }    
+
+    BuscarTarea (TareasPendientes, TareasRealizadas,cantidadTareas, TareaBuscada);
 
     //Libero memorias
     free(Buff);
@@ -138,5 +117,34 @@ int main(){
     free(TareasRealizadas);
 
     getchar();
+    return 0;
+}
+
+void BuscarTarea (struct Tarea ** Pendientes, struct Tarea ** Realizadas,int Cantidad,  int Tarea){
+    
+/*
+    for (int i = 0; i < cantidadTareas; i++)
+    {
+        if (TareaBuscada == TareasPendientes[i]->TareaID)
+        {
+            puts("\nTarea Pendiente");
+            printf("Tarea: %d", TareasPendientes[i]->TareaID);
+            printf("\nDescripcion: %s", TareasPendientes[i]->Descripcion);
+            printf("\nDuracion: %d\n", TareasPendientes[i]->Duracion);
+        } 
+    }
+ */
+    for (int i = 0; i < Cantidad; i++)
+    {
+        if (Tarea == Realizadas[i]->TareaID)
+        {
+            puts("\nTarea Realizada");
+            
+            printf("\nTarea: %d", Realizadas[i]->TareaID);
+            printf("\nDescripcion: %s", Realizadas[i]->Descripcion);
+            printf("\nDuracion: %d\n", Realizadas[i]->Duracion);
+        }
+    } 
+
     return 0;
 }
