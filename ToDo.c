@@ -9,6 +9,8 @@ struct Tarea {
     int Duracion; // entre 10 – 100 
 };
 
+void buscarTarea(struct Tarea **, struct Tarea **, int, char *);
+
 int main(){
     int cantidadTareas,j;
     struct Tarea **TareasPendientes;
@@ -16,6 +18,7 @@ int main(){
     char *Buff;
     int ControlTarea; //1=Si, 0=No
     int ContadorTareasRealizadas = 0;
+    char *PalabraClave;
 
     srand(time(NULL));
 
@@ -68,7 +71,6 @@ int main(){
             TareasPendientes[i] = NULL;
             ContadorTareasRealizadas++;
         } 
-        
     }
 
     printf("\n*****LISTA DE TAREAS REALIZADAS*****\n");
@@ -86,15 +88,30 @@ int main(){
     {
         if (TareasPendientes[i] != NULL)
         {
-             printf("\nTarea: %d", TareasPendientes[i]->TareaID);
-        printf("\nDescripcion: %s", TareasPendientes[i]->Descripcion);
-        printf("\nDuracion: %d\n", TareasPendientes[i]->Duracion);
+            printf("\nTarea: %d", TareasPendientes[i]->TareaID);
+            printf("\nDescripcion: %s", TareasPendientes[i]->Descripcion);
+            printf("\nDuracion: %d\n", TareasPendientes[i]->Duracion);
         }
-        
-       
     }
     
-    
+    puts("\n*****BUSCADOR DE TAREA*****");
+
+    printf("\nIngrese la palabra clave: ");
+    gets(Buff);
+
+    PalabraClave = (char *) malloc(strlen(Buff)+1 * sizeof(char));
+    strcpy(PalabraClave, Buff);
+
+    for (int i = 0; i < cantidadTareas; i++)
+    {
+        if (!strcmp(PalabraClave, TareasPendientes[i]->Descripcion))
+        {
+            printf("Tarea Pendiente");
+            printf("\nTarea: %d", TareasPendientes[i]->TareaID);
+            printf("\nDescripcion: %s", TareasPendientes[i]->Descripcion);
+            printf("\nDuracion: %d\n", TareasPendientes[i]->Duracion);
+        } 
+    }
 
     //Libero memorias
     free(Buff);
@@ -107,6 +124,8 @@ int main(){
     free(TareasPendientes);
     
     free(TareasRealizadas);
+
+    free(PalabraClave);
 
     getchar();
     return 0;
