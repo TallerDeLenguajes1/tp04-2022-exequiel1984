@@ -14,20 +14,22 @@ struct TNodo{
     struct TNodo *siguiente;
 } typedef Nodo;
 
-//********************DECLARO FUNCIONES***************
+//********************DECLARO FUNCIONES***********************************
 
 void CrearListaVacia(Nodo **);
+void CargarTarea(Nodo **Cabecera, int i, char *Buff);
+void InsertarTareAlFinal(Nodo **Cabecera);
+void ControlTarea(Nodo *, char *);
 void MostrarLista(Nodo *);
-void CargarListaAlFinal(Nodo **, int, char *);
 void LiberarLista(Nodo *);
 
-//*********************MAIN***************************
+//*********************MAIN***********************************************
 
 int main(){
 
     int CantidadTareasACargar;
     char *Buff;
-    int ControlTarea; //1=Si, 0=No
+    
     int ContadorTareasRealizadas = 0;
     char *PalabraClave;
 
@@ -45,9 +47,14 @@ int main(){
 
     for (int i = 0; i < CantidadTareasACargar; i++)
     {
-        CargarListaAlFinal(&TareasPendientes, i, Buff);
+        CargarTarea(TareasPendientes, i, Buff);
+        InsertarTareAlFinal(&TareasPendientes);
     }
-    
+
+    //ControlTarea(&TareasRealizadas, Buff);
+
+    printf("\n*****LISTA DE TAREAS REALIZADAS*****\n");
+    MostrarLista(TareasRealizadas);
 
     printf("\n*****LISTA DE TAREAS PENDIENTES*****\n");
     MostrarLista(TareasPendientes);
@@ -56,41 +63,6 @@ int main(){
     
 
 
-    // printf("\n\n*****CONTROL DE TAREAS PENDIENTES CARGADAS*****\n");
-
-        
-
-    //     printf("\n¿La tarea se realizo (Si = 1, No = 0? ");
-    //     scanf("%d", &ControlTarea);
-
-    //     if (ControlTarea)
-    //     {
-    //         TareasRealizadas[ContadorTareasRealizadas] = TareasPendientes[i];
-    //         TareasPendientes[i] = NULL;
-    //         ContadorTareasRealizadas++;
-    //     } 
-    // }
-
-    // printf("\n*****LISTA DE TAREAS REALIZADAS*****\n");
-
-    // for (int i = 0; i < ContadorTareasRealizadas; i++)
-    // {
-    //     printf("\nTarea: %d", TareasRealizadas[i]->TareaID);
-    //     printf("\nDescripcion: %s", TareasRealizadas[i]->Descripcion);
-    //     printf("\nDuracion: %d\n", TareasRealizadas[i]->Duracion);
-    // }
-
-    // printf("\n\n*****TAREAS PENDIENTES*****\n");
-
-    //   for (int i = 0; i < cantidadTareas; i++)
-    // {
-    //     if (TareasPendientes[i] != NULL)
-    //     {
-    //         printf("\nTarea: %d", TareasPendientes[i]->TareaID);
-    //         printf("\nDescripcion: %s", TareasPendientes[i]->Descripcion);
-    //         printf("\nDuracion: %d\n", TareasPendientes[i]->Duracion);
-    //     }
-    // }
     
     // puts("\n*****BUSCADOR DE TAREA*****");
 
@@ -116,8 +88,7 @@ int main(){
 
     LiberarLista(TareasPendientes);
     
-    
-    // free(TareasRealizadas);
+    LiberarLista(TareasRealizadas);
 
     // free(PalabraClave);
 
@@ -131,33 +102,68 @@ void CrearListaVacia(Nodo **Lista){
     *Lista=NULL;
 }
 
+void CargarTarea(Nodo **Cabecera, int i, char *Buff){
+    Nodo *TareaACargar;
+    Nodo *TareaACargar = *Cabecera;
+    TareaACargar = (Nodo *) malloc(sizeof(Nodo));
 
-void CargarListaAlFinal(Nodo **NuevoNodo, int i, char *Buff){
-    Nodo *NodoAux;
-    Nodo *Aux2 = *NuevoNodo;
-    NodoAux = (Nodo *) malloc(sizeof(Nodo));
-
-    NodoAux->T.TareaID = i+1;
-    printf("\nTarea %d", NodoAux->T.TareaID);
+    TareaACargar->T.TareaID = i+1;
+    printf("\nTarea %d", TareaACargar->T.TareaID);
     printf("\nDescripcion: ");
     gets(Buff);
-    NodoAux->T.Descripcion = (char *) malloc(strlen(Buff)+1 * sizeof(char));
-    strcpy(NodoAux->T.Descripcion, Buff);
-    NodoAux->T.Duracion = 10 + rand() % 100 - 10;
-    printf("Duracion: %d\n", NodoAux->T.Duracion);
+    TareaACargar->T.Descripcion = (char *) malloc(strlen(Buff)+1 * sizeof(char));
+    strcpy(TareaACargar->T.Descripcion, Buff);
+    TareaACargar->T.Duracion = 10 + rand() % 100 - 10;
+    printf("Duracion: %d\n", TareaACargar->T.Duracion);
+    
+}
 
-    NodoAux->siguiente = NULL;
-    if (Aux2 != NULL)
+void InsertarTareAlFinal(Nodo **Cabecera){
+    Nodo *NodoAAgregar;
+    Nodo *RecorredorDeLista = *Cabecera;
+
+    NodoAAgregar->siguiente = NULL;
+    if (RecorredorDeLista != NULL)
     {
-        while (Aux2->siguiente != NULL)
-        {
-            Aux2 = Aux2->siguiente;
+        while (RecorredorDeLista->siguiente != NULL){
+            RecorredorDeLista = RecorredorDeLista->siguiente;
         }
-        Aux2->siguiente = NodoAux;
+        RecorredorDeLista->siguiente = NodoAAgregar;
     } else{
-        *NuevoNodo = NodoAux;//estoy cargando al final de la fila
+        *Cabecera = NodoAAgregar;
     }
 }
+
+
+
+// void ControlTarea(Nodo *ListaPendiente,Nodo *ListaRealizada, char *Buff){
+//     int i=0;
+//     int ControlTarea; //1=Si, 0=No
+//     Nodo *TareaPendienteActual;
+
+//     TareaPendienteActual=ListaPendiente;
+
+//     while (TareaPendienteActual!=NULL)
+//     {
+//         printf("\n*****CONTROL DE TAREAS PENDIENTES CARGADAS*****\n");
+
+//         printf("\nTarea %d", ListaPendiente->T.TareaID);
+//         printf("\nDescripcion: %s", ListaPendiente->T.Descripcion);
+//         printf("\nDuracion: %d\n", ListaPendiente->T.Duracion);
+
+//         printf("\n¿La tarea se realizo (Si = 1, No = 0? ");
+//         scanf("%d", &ControlTarea);
+//         getchar();
+
+//         if (ControlTarea){
+//             insertarnodoalfinal(tareapendienteactual, ListaRealizada);
+//             quitardelista(ListaPendiente, TareaPendienteActual);
+//         } 
+//     }
+//     i++;
+// }
+
+   // quitardelista
 
 void MostrarLista(Nodo *Lista){
     int i=0;
@@ -169,6 +175,7 @@ void MostrarLista(Nodo *Lista){
         printf("\nDuracion: %d\n", Lista->T.Duracion);
 
         Lista = Lista->siguiente;
+
         i++;
     }
 }
