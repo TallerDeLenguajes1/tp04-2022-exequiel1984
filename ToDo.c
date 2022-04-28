@@ -17,7 +17,7 @@ struct TNodo{
 //********************DECLARO FUNCIONES***********************************
 
 void CrearListaVacia(Nodo **);
-void CargarTarea(Nodo **Cabecera, int i, char *Buff);
+void CargarTareaAlComienzo(Nodo **Cabecera, int i, char *Buff);
 void InsertarTareAlFinal(Nodo **Cabecera);
 void ControlTareas(Nodo **Pendientes, Nodo **Realizadas);
 void MostrarLista(Nodo *);
@@ -48,7 +48,7 @@ int main(){
 
     for (int i = 0; i < CantidadTareasACargar; i++)
     {
-        CargarTarea(&TareasPendientes, i, Buff);
+        CargarTareaAlComienzo(&TareasPendientes, i, Buff);
     }
 
     ControlTareas(&TareasPendientes, &TareasRealizadas);
@@ -155,13 +155,17 @@ void ControlTareas(Nodo **Pendientes, Nodo **Realizadas){
         scanf("%d", &ControlTarea);
         getchar();
 
-        if (ControlTarea)
+        if (ControlTarea == 1)
         {
             Nodo * NodoLibre = QuitarTarea(&RecorredorDeLista);
             InsertarNodoEnLista(Realizadas,NodoLibre);
+        }
+        else
+        {
+             RecorredorDeLista = RecorredorDeLista->siguiente;   
         } 
     
-        RecorredorDeLista = RecorredorDeLista->siguiente;        
+               
     } 
 }
 
