@@ -19,10 +19,11 @@ struct TNodo{
 void CrearListaVacia(Nodo **);
 void CargarTarea(Nodo **Cabecera, int i, char *Buff);
 void InsertarTareAlFinal(Nodo **Cabecera);
-void ControlTarea(Nodo *, char *);
+void ControlTareas(Nodo **Pendientes, Nodo **Realizadas);
 void MostrarLista(Nodo *);
 void LiberarLista(Nodo *);
-
+Nodo * QuitarTarea(Nodo **Listado);
+void InsertarNodoEnLista(Nodo **ListadoDeTareas, Nodo * nodo);
 //*********************MAIN***********************************************
 
 int main(){
@@ -47,11 +48,10 @@ int main(){
 
     for (int i = 0; i < CantidadTareasACargar; i++)
     {
-        CargarTarea(TareasPendientes, i, Buff);
-        InsertarTareAlFinal(&TareasPendientes);
+        CargarTarea(&TareasPendientes, i, Buff);
     }
 
-    //ControlTarea(&TareasRealizadas, Buff);
+    ControlTareas(&TareasPendientes, &TareasRealizadas);
 
     printf("\n*****LISTA DE TAREAS REALIZADAS*****\n");
     MostrarLista(TareasRealizadas);
@@ -83,7 +83,7 @@ int main(){
     //     } 
     // }
 
-    //Libero memorias
+
     free(Buff);
 
     LiberarLista(TareasPendientes);
@@ -102,9 +102,8 @@ void CrearListaVacia(Nodo **Lista){
     *Lista=NULL;
 }
 
-void CargarTarea(Nodo **Cabecera, int i, char *Buff){
+void CargarTareaAlComienzo(Nodo **Cabecera, int i, char *Buff){
     Nodo *TareaACargar;
-    Nodo *TareaACargar = *Cabecera;
     TareaACargar = (Nodo *) malloc(sizeof(Nodo));
 
     TareaACargar->T.TareaID = i+1;
@@ -116,54 +115,55 @@ void CargarTarea(Nodo **Cabecera, int i, char *Buff){
     TareaACargar->T.Duracion = 10 + rand() % 100 - 10;
     printf("Duracion: %d\n", TareaACargar->T.Duracion);
     
-}
-
-void InsertarTareAlFinal(Nodo **Cabecera){
-    Nodo *NodoAAgregar;
-    Nodo *RecorredorDeLista = *Cabecera;
-
-    NodoAAgregar->siguiente = NULL;
-    if (RecorredorDeLista != NULL)
-    {
-        while (RecorredorDeLista->siguiente != NULL){
-            RecorredorDeLista = RecorredorDeLista->siguiente;
-        }
-        RecorredorDeLista->siguiente = NodoAAgregar;
-    } else{
-        *Cabecera = NodoAAgregar;
-    }
+    TareaACargar->siguiente=*Cabecera;
+    *Cabecera=TareaACargar;   
 }
 
 
+Nodo * QuitarTarea(Nodo **Listado)
+{
+    // sacar el nodo listas
+    Nodo * aux = *Listado;
+    // dejar la lista estable
+    *Listado = aux->siguiente;
+    // Poner el nodo como si estuviera libre
+    aux->siguiente = NULL;
+    // devolver el nodo quitado
+    return aux;    
+}
 
-// void ControlTarea(Nodo *ListaPendiente,Nodo *ListaRealizada, char *Buff){
-//     int i=0;
-//     int ControlTarea; //1=Si, 0=No
-//     Nodo *TareaPendienteActual;
+void InsertarNodoEnLista(Nodo **ListadoDeTareas, Nodo * nodo)
+{
+     nodo->siguiente = *ListadoDeTareas;
+    *ListadoDeTareas = nodo;
+}
 
-//     TareaPendienteActual=ListaPendiente;
+void ControlTareas(Nodo **Pendientes, Nodo **Realizadas){
+    int ControlTarea; //1=Si, 0=No
+    Nodo *Aux;
+    Nodo *RecorredorDeLista = *Pendientes;
 
-//     while (TareaPendienteActual!=NULL)
-//     {
-//         printf("\n*****CONTROL DE TAREAS PENDIENTES CARGADAS*****\n");
+    printf("\n*****CONTROL DE TAREAS*****\n");
+    
+    while (RecorredorDeLista)
+    {    
+        printf("\nTarea %d", RecorredorDeLista->T.TareaID);
+        printf("\nDescripcion: %s", RecorredorDeLista->T.Descripcion);
+        printf("\nDuracion: %d\n", RecorredorDeLista->T.Duracion);
 
-//         printf("\nTarea %d", ListaPendiente->T.TareaID);
-//         printf("\nDescripcion: %s", ListaPendiente->T.Descripcion);
-//         printf("\nDuracion: %d\n", ListaPendiente->T.Duracion);
+        printf("\n¿La tarea se realizo (Si = 1, No = 0? ");
+        scanf("%d", &ControlTarea);
+        getchar();
 
-//         printf("\n¿La tarea se realizo (Si = 1, No = 0? ");
-//         scanf("%d", &ControlTarea);
-//         getchar();
-
-//         if (ControlTarea){
-//             insertarnodoalfinal(tareapendienteactual, ListaRealizada);
-//             quitardelista(ListaPendiente, TareaPendienteActual);
-//         } 
-//     }
-//     i++;
-// }
-
-   // quitardelista
+        if (ControlTarea)
+        {
+            Nodo * NodoLibre = QuitarTarea(&RecorredorDeLista);
+            InsertarNodoEnLista(Realizadas,NodoLibre);
+        } 
+    
+        RecorredorDeLista = RecorredorDeLista->siguiente;        
+    } 
+}
 
 void MostrarLista(Nodo *Lista){
     int i=0;
